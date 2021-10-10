@@ -55,7 +55,7 @@ bool color_the_picture(int string[41][11], int n, int column[11][41], int m, int
         put_i_way(i, string, n, nonogram);
         if(checking_by_columns(i, column, m, string, n))
         {
-            color_the_picture(string, n, column, m, nonogram, k - 1);
+            return color_the_picture(string, n, column, m, nonogram, k - 1);
         }
         else
         {
