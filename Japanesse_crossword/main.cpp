@@ -70,31 +70,6 @@ bool color_the_picture(int string[41][11], int n, int column[11][41], int m, int
 int number_of_ways(int ii, int string[41][11], int n)
 {
     int ans = 0;
-    int str[41]{-1};
-    int k = 0;
-    for(int i = 0; i < n; i++)
-    {
-        for(int i = 1; i <= string[ii][0]; i++)
-        {
-            for(int j = 0; j < string[ii][i]; j++)
-            {
-                if(k > n)
-                {
-                    break;
-                }
-                str[k] = 1;
-                if(j == string[ii][i] - 1 && i != string[ii][0])
-                {
-                    str[k + 1] = -1;
-                    k++;
-                }
-            }
-            if(i = string[ii][0])
-            {
-                ans++;
-            }
-        }
-    }
     return ans;
 }
 
@@ -102,39 +77,8 @@ int number_of_ways(int ii, int string[41][11], int n)
 void put_i_way(int ii, int string[41][11], int count, int n, int nonogram[41][41])
 {
     int str[41]{-1};
-    int k = 0;
-    for(int i = 0; i < n; i++)
-    {
-        for(int i = 1; i <= string[ii][0]; i++)
-        {
-            for(int j = 0; j < string[ii][i]; j++)
-            {
-                if(k > n)
-                {
-                    break;
-                }
-                str[k] = 1;
-                if(j == string[ii][i] - 1 && i != string[ii][0])
-                {
-                    str[k + 1] = -1;
-                    k++;
-                }
-            }
-            if(i = string[ii][0])
-            {
-                count--;
-            }
-            if(count == 0)
-            {
-                for(int i = 0; i < n; i++)
-                {
-                    nonogram[ii][i] = str[i];
-                }
-                return;
-            }
-        }
-    }
 }
+
 //проверят строчную расстановку на соответсвие столбикам
 bool checking_by_columns(int i, int column[11][41], int m, int string[41][11], int n)
 {
