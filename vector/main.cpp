@@ -47,6 +47,10 @@ vector<int> repeat(vector<int> v, int n)
 vector<int>::iterator find_second(vector<int> v, int d)
 {
     vector<int>::iterator i = find(v.begin(), v.end(), d);
+    if(i == v.end())
+    {
+        return i;
+    }
     i++;
     i = find(i, v.end(), d);
     return i;
@@ -58,6 +62,10 @@ vector<int>::iterator find_last(vector<int> v, int d)
     {
         i = find(i, v.end(), d);
         i++;
+    }
+    if(i == v.begin() && *i != d)
+    {
+        return v.end();
     }
     return i;
 }
@@ -107,8 +115,8 @@ void find_index(vector<double> v, double x, int &i, int &j)
         b--;
     }
     b--;
-    i = 0;
-    j = 0;
+    i = 0; //v.begin() - b
+    j = 0; //distance()
     while(c != a)
     {
         j++;
@@ -146,7 +154,8 @@ int main()
     print(v2);
     del(v);
     print(v);*/
-    /*copy()
+
+    //copy()
     vector<int> v1{1, 3, 5, 7, 9};
     int arr[5]{0};
     copy(v1.begin(), v1.end(), arr);
@@ -161,7 +170,8 @@ int main()
     print(v2);
     print(v3);
     v3 = repeat(v2, 4);
-    print(v3);*/
+    print(v3);
+
     /*find()
     vector <int> v{3, 2, 5, 9, 4, 5, 7};
     cout << *find_second(v, 1) << '\n';
@@ -174,6 +184,7 @@ int main()
     vector<int> vv2{5, 3, 7, 8};
     subseq(vv, vv1);
     subseq(vv, vv2); */
+
     /*upper_bound() and lower_bound() find
     vector<int> v1 {11,24,31,31,40,50,60,60,70,100,112};
     sort(v1.begin(), v1.end());
