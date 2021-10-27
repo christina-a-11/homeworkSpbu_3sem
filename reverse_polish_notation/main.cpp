@@ -83,17 +83,17 @@ void f1()
 				{
 					if (arr.top() != '(')
 					{
-						if (x == '/' || x == '*')
+						if (x == '+' || x == '-')
 						{
-							while (arr.top() != '+' && arr.top() != '-')
+							while(arr.size() > 0)
 							{
 								ans.push_back(arr.top());
-								arr.pop();
+							     arr.pop();
 							}
 						}
-						else if (x == '+' || x == '-')
+						else if (x == '*' || x == '/')
 						{
-							while (!arr.empty())
+							while(arr.top() == '*' || arr.top() == '/')
 							{
 								ans.push_back(arr.top());
 								arr.pop();
@@ -114,7 +114,7 @@ void f1()
 }
 int main()
 {
-	cout << f2();
-  f1();
+	//cout << f2();
+     f1();
 	return 0;
 }
