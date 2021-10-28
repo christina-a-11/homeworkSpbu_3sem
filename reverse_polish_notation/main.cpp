@@ -60,7 +60,8 @@ void f1()
 	{
 		if (isdigit(x))
 		{
-			ans.push_back(x);
+			cout << x << " ";
+			//ans.push_back(x);
 		}
 		else
 		{
@@ -72,7 +73,8 @@ void f1()
 			{
 				while (arr.top() != '(')
 				{
-					ans.push_back(arr.top());
+					cout << arr.top() << " ";
+					//ans.push_back(arr.top());
 					arr.pop();
 				}
 				arr.pop();
@@ -85,17 +87,19 @@ void f1()
 					{
 						if (x == '+' || x == '-')
 						{
-							while(arr.size() > 0)
+							while (arr.size() > 0)
 							{
-								ans.push_back(arr.top());
-							     arr.pop();
+								cout << arr.top() << " ";
+								//ans.push_back(arr.top());
+								arr.pop();
 							}
 						}
 						else if (x == '*' || x == '/')
 						{
-							while(arr.top() == '*' || arr.top() == '/')
+							while (arr.top() == '*' || arr.top() == '/')
 							{
-								ans.push_back(arr.top());
+								cout << arr.top() << " ";
+								//ans.push_back(arr.top());
 								arr.pop();
 							}
 						}
@@ -107,7 +111,8 @@ void f1()
 	}
 	while (!arr.empty())
 	{
-		ans.push_back(arr.top());
+		cout << arr.top();
+		//ans.push_back(arr.top());
 		arr.pop();
 	}
 	print(ans);
@@ -115,6 +120,7 @@ void f1()
 int main()
 {
 	//cout << f2();
-     f1();
+	f1();
+	system("pause>nul");
 	return 0;
 }
