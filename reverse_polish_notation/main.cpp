@@ -54,7 +54,7 @@ void print(vector<char> a)
 void f1()
 {
 	stack <char> arr;
-	vector <char> ans;
+	//vector <char> ans;
 	char x;
 	while (cin >> x)
 	{
