@@ -47,7 +47,7 @@ void delete_i_way(int ii, int nonogram[41][41], int m)
 
 bool color_the_picture(int string[41][11], int n, int column[11][41], int m, int nonogram[41][41], int k)
 {
-	//к - количество незакрашеных строк
+    //к - количество незакрашеных строк
     if(k == 0)
     {
         return true;
@@ -71,7 +71,7 @@ bool color_the_picture(int string[41][11], int n, int column[11][41], int m, int
 //считает кол-во перестановок групп
 int number_of_ways(int ii, int string[41][11], int nn)
 {
-     int sum = 0;
+    int sum = 0;
 	int n = string[ii][0]; //кол-во групп раскраски
 	for(int i = 0; i < n; i++)
 	{
@@ -83,11 +83,11 @@ int number_of_ways(int ii, int string[41][11], int nn)
 	}
 	if(sum > nn)
 	{
-	 return 0;
+        return 0;
 	}
 	else if(sum == nn)
 	{
-	 return 1;
+        return 1;
 	}
 	else
 	{
@@ -104,8 +104,6 @@ int number_of_ways(int ii, int string[41][11], int nn)
 				t = t / n;
 				cout << "t = " << t << endl;
 			}
-			cout << "i = " << i << endl;
-			cout << "tmp = " << tmp << endl << endl;
 			if(tmp < n)
 			{
 				ans++;
@@ -118,7 +116,76 @@ int number_of_ways(int ii, int string[41][11], int nn)
 //вставляет в нонограму расстановку по номеру i
 void put_i_way(int ii, int string[41][11], int count, int n, int nonogram[41][41])
 {
-    int str[41]{-1};
+    int n = string[ii][0]; //кол-во групп раскраски
+    for(int i = 1; i <= n; i++)
+	{
+		    sum += string[ii][i];
+		    if(i != n - 1)
+		    {
+			    sum += 1;
+		    }
+	}
+	int c = 0;
+	int s = (nn - sum) * (pow(n , n - 1)); //нижнее число в таблице переборов нулей по системе счисления
+	for(int i = 0; i <= s; i++)
+	{
+		int tmp = 0;
+		int t = i;
+		for(int j = 0; j < n; j++)
+		{
+			tmp += t % n;
+			t = t / n;
+		}
+		if(tmp < n)
+		{
+			c++;
+		}
+		if(c == count) // начинаем раскраску строки
+		{
+		     tmp = 0;
+		     t = i;
+		     int index = nn - 1;
+		     for(int l = n; l > 0; l--) //цикл по элементам групп раскраски
+		     {
+		        tmp = t % n;
+		        t = t / n;
+		        if(l != n)
+		        {
+		            for(int m = 0; m <= tmp; m++)
+		            {
+		                nonogram[ii][index] = 0;
+		                index--;
+		            }
+		          }
+		        else
+		        {
+		            for(int m = 0; m < tmp; m++)
+		            {
+		                nonogram[ii][index] = 0;
+		                index--;
+		            }
+		        }
+		        for(int m = 0; m < string[ii][l]; m++)
+		        {
+		            nonogram[ii][index] = 1;
+		            index--;
+		        }
+		    }
+		}
+		if(c == count)
+		{
+		    break;
+		}
+	}
+	//получили раскраску в обратном порядке, теперь делаем в прямом
+	while(nonogram[0][0] == -1)
+	{
+	    for(int i = 0; i < nn - 1; i++)
+	    {
+	        nonogram[ii][i] = nonogram[ii][i + 1];
+	    }
+	    nonogram[ii][nn - 1] = 0;
+	}
 }
 
 //проверят строчную расстановку на соответсвие столбикам
