@@ -17,6 +17,14 @@ void f_print (BNode* r, int skip = 0) // skip - отступ
     cout << r->data << endl; // печать данных узла и переход на следующую строчку
     f_print(r->left, skip + 3); // рекурсивный вызов для правого поддерева с отступом
 }
+int f_count (BNode * p)
+{
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	return 1 + f_count(p->left) + f_count(p->right);
+}
 
 struct BTree
 {
@@ -26,7 +34,7 @@ struct BTree
 	void print() // метод печати
 	{
 		f_print(root); // вызывает рекурсивную функцию
-		cout << endl;
+		cout << "_____________________" << endl << endl;
 	}
 	BNode * left_node()
 	{
@@ -124,16 +132,53 @@ struct BTree
 		BTree r1(r);
 		return r1.left_leaf();
 	}
+	int count()
+	{
+		return f_count(root);
+	}
+	void scale(BNode * p)
+	{
+		if(p == nullptr)
+		{
+			return;
+		}
+		p->data = 3 * p->data;
+		scale(p->left);
+		scale(p->right);
+	}
+	int sum(BNode * p)
+	{
+		if(p == nullptr)
+		{
+			return 0;
+		}
+		return p->data + sum(p->left) + sum(p->right);
+	}
+	int count_neg(BNode * p)
+	{
+		if(p == nullptr)
+		{
+			return 0;
+		}
+		if(p->data >= 0)
+		{
+			return count_neg(p->left) + count_neg(p->right);
+		}
+		else
+		{
+			return 1 + count_neg(p->left) + count_neg(p->right);
+		}
+	}
 };
 int main()
 {
 	BNode *p13 = new BNode(13),
-	*p7 = new BNode(7),
+	*p7 = new BNode(-7),
 	*p4 = new BNode(4),
 	*p14 = new BNode(14, p13),
-	*p6 = new BNode(6, p4, p7),
-	*p1 = new BNode(1),
-	*p10 = new BNode(10, p14),
+	*p6 = new BNode(-6, p4, p7),
+	*p1 = new BNode(-1),
+	*p10 = new BNode(-10, p14),
 	*p3 = new BNode(3, p1, p6),
 	*p8 = new BNode(8, p3, p10);
 	BTree t(p8);
@@ -150,5 +195,10 @@ int main()
 	t.del_left_leaf();
 	t.print();
 	cout << "second left leaf = " << t.second_left_node()->data << endl;
+	cout << "count = " << t.count() << endl;
+	t.scale(p8);
+	t.print();
+	cout << "sum = " << t.sum(p8) << endl;
+	cout << "count neg node = " << t.count_neg(p8) << endl;
 	return EXIT_SUCCESS;
 }
