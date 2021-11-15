@@ -52,17 +52,19 @@ struct BTree
 		{
 			t = t -> left;
 		}
+		BNode * tmp = t->left;
 		t->left = (t->left)->right;
+		delete tmp;
 	}
 	void put_left_son(int d)
 	{
 		BNode * t = left_node();
-		t -> left = new BNode(d);
+		t->left = new BNode(d);
 	}
 	BNode * left_leaf()
 	{
 		BNode * t = left_node();
-		while(t-> left != nullptr || t->right != nullptr)
+		while(t->left != nullptr || t->right != nullptr)
 		{
 			if(t->left != nullptr)
 			{
@@ -121,17 +123,14 @@ struct BTree
 				t = t->right;
 			}
 		}
-		if(r->right != nullptr)
-		{
-			r = r->right;
-		}
-		if(r == nullptr)
+		if(r->right == nullptr)
 		{
 			return nullptr;
 		}
 		BTree r1(r);
 		return r1.left_leaf();
 	}
+	//
 	int count()
 	{
 		return f_count(root);
@@ -169,6 +168,102 @@ struct BTree
 			return 1 + count_neg(p->left) + count_neg(p->right);
 		}
 	}
+	int height(BNode * t) //передать корень
+	{
+		if(t == nullptr)
+		{
+			return 0;
+		}
+		return 1 + 
+		( height(t->left) > height(t->right) ? height(t->left) : height(t->right));
+	}
+	void reflect(BNode * t) // запуск от корня
+	{
+		if(t == nullptr)
+		{
+			return;
+		}
+		if(t->left != nullptr || t->right != nullptr)
+		{
+			BNode * tmp = t->left;
+			t->left = t->right;
+			t->right = tmp;
+			reflect(t->left);
+			reflect(t->right);
+		}
+	}
+	int mult(BNode * t) //передать корень
+	{
+		if(t == nullptr)
+		{
+			return 1;
+		}
+		if(t->left != nullptr && t->right != nullptr)
+		{
+			return (t->data) * mult(t->left) * mult(t->right);
+		}
+		else
+		{
+			return mult(t->left) * mult(t->right);
+		}
+	}
+	int evan(BNode * t)
+	{
+		if(t == nullptr)
+		{
+			return 1;
+		}
+		if(t->left == nullptr && t->right == nullptr)
+		{
+			return t->data;
+		}
+		if(t->left != nullptr || t->right != nullptr)
+		{
+			if(t->data == 1) return evan(t->left) + evan(t->right);
+			if(t->data == 2) return evan(t->left) - evan(t->right);
+			if(t->data == 3) return evan(t->left) * evan(t->right);
+			if(t->data == 4) return (float)evan(t->left) / evan(t->right);
+		}
+	}
+	template <class T> BNode * find(T d, BNode * t)
+	{
+		if(t == nullptr)
+		{
+			return t;
+		}
+		if(t->data == d)
+		{
+			return t;
+		}
+		else
+		{
+			if(find(d, t->left) != nullptr)
+			{
+				return find(d, t->left);
+			}
+			else if(find(d, t->right) != nullptr)
+			{
+				return find(d, t->right);
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+	}
+	int min(int m, BNode * t) //запуск от корня
+	{
+		if(t == nullptr)
+		{
+			return m;
+		}
+		if(t->data < m)
+		{
+			m = t->data;
+		}
+		return (min(m, t->left) < min(m, t->right) ?
+		 min(m, t->left) : min(m, t->right));
+	}
 };
 int main()
 {
@@ -200,5 +295,16 @@ int main()
 	t.print();
 	cout << "sum = " << t.sum(p8) << endl;
 	cout << "count neg node = " << t.count_neg(p8) << endl;
+	cout << "height tree = " << t.height(p8) << endl;
+	cout << "mult = " << t.mult(p8) << endl;
+	cout << "_________________" << endl;
+	t.reflect(p8);
+	t.print();
+	cout << "min element = " << t.min(p8->data, p8) << endl;
+	if(t.find(165, p8) != nullptr)
+	{
+		cout << t.find(165, p8)->data << endl;
+	}
+	cout << "height tree = " << t.height(p8) << endl;
 	return EXIT_SUCCESS;
 }
