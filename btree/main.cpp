@@ -209,15 +209,11 @@ struct BTree
 	}
 	int evan(BNode * t)
 	{
-		if(t == nullptr)
-		{
-			return 1;
-		}
 		if(t->left == nullptr && t->right == nullptr)
 		{
 			return t->data;
 		}
-		if(t->left != nullptr || t->right != nullptr)
+		else if(t->left != nullptr || t->right != nullptr)
 		{
 			if(t->data == 1) return evan(t->left) + evan(t->right);
 			if(t->data == 2) return evan(t->left) - evan(t->right);
@@ -267,7 +263,7 @@ struct BTree
 };
 int main()
 {
-	BNode *p13 = new BNode(13),
+	/*BNode *p13 = new BNode(13),
 	*p7 = new BNode(-7),
 	*p4 = new BNode(4),
 	*p14 = new BNode(14, p13),
@@ -306,5 +302,16 @@ int main()
 		cout << t.find(165, p8)->data << endl;
 	}
 	cout << "height tree = " << t.height(p8) << endl;
+	*/
+    BNode *p7 = new BNode(7), 
+	*p6 = new BNode(6),
+	*p5 = new BNode(5),
+	*p4 = new BNode(4),
+	*p3 = new BNode(2, p6, p7),
+	*p2 = new BNode(1, p4, p5),
+	*p1 = new BNode(3, p2, p3);
+	BTree t(p1);
+	t.print();
+	cout << "ans = " << t.evan(p1);
 	return EXIT_SUCCESS;
 }
