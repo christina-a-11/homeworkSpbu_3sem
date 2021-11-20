@@ -25,17 +25,32 @@ int f_count (BNode * p)
 	}
 	return 1 + f_count(p->left) + f_count(p->right);
 }
+void f_del(BNode *& p)
+{
+	if(p == nullptr)
+	{
+		return;
+	}
+	f_del(p->left);
+	f_del(p->right);
+	delete p;
+	p = nullptr;
+}
 
 struct BTree
 {
-	BNode * root; // корень дерева
-	BTree(BNode *p) : root(p) {}
-	// конструктор по указателю на узел
-	void print() // метод печати
+	BNode * root; //корень
+	BTree(BNode *p) : root(p) {}//конструктор
+	~BTree ()
 	{
-		f_print(root); // вызывает рекурсивную функцию
+		f_del(root);
+	}
+	void print()
+	{
+		f_print(root);
 		cout << "_____________________" << endl << endl;
 	}
+	//сдано
 	BNode * left_node()
 	{
 		BNode * t = root;
@@ -130,7 +145,23 @@ struct BTree
 		BTree r1(r);
 		return r1.left_leaf();
 	}
-	//
+	//обход дерева
+	void enlarge(int d) // метод enlarge
+	{
+		f_enlarge(root, d);
+	}
+	void f_enlarge(BNode* p, int d)  // вспомогательная рекурсивная функция f_enlarge
+    {
+		if(p == nullptr)
+		{
+			p = new BNode(d);
+		} 
+		else
+		{
+			f_enlarge(p->left,d);
+		    f_enlarge(p->right,d); 
+		}
+}
 	int count()
 	{
 		return f_count(root);
@@ -175,7 +206,8 @@ struct BTree
 			return 0;
 		}
 		return 1 + 
-		( height(t->left) > height(t->right) ? height(t->left) : height(t->right));
+		( height(t->left) > height(t->right) ?
+		 height(t->left) : height(t->right));
 	}
 	void reflect(BNode * t) // запуск от корня
 	{
@@ -260,10 +292,108 @@ struct BTree
 		return (min(m, t->left) < min(m, t->right) ?
 		 min(m, t->left) : min(m, t->right));
 	}
+	//удаление
+	void del0(BNode *& p)
+	{
+		if(p == nullptr)
+		{
+			return;
+		}
+		if(p->data == 0)
+		{
+			f_del(p);
+		}
+		else
+		{
+			del0(p->left);
+			del0(p->right);
+		}
+	}
+	void delLeaves(BNode *& p)
+	{
+		if(p == nullptr)
+		{
+			return;
+		}
+		if(p->left == nullptr && p->right == nullptr)
+		{
+			f_del(p);
+		}
+		else
+		{
+			delLeaves(p->left);
+			delLeaves(p->right);
+		}
+	}
+	template <class T> void enlarge1(T d, BNode * p)
+	{
+		if(p->left == nullptr)
+		{
+			p->left = new BNode(d);
+		}
+		if(p->right == nullptr)
+		{
+			p->right = new BNode(d);
+		}
+		else
+		{
+			enlarge1(d, p->left);
+			enlarge1(d, p->right);
+		}
+	}
+	void dell(BNode * p)
+	{
+		if(p == nullptr)
+		{
+			return;
+		}
+		if(p->left != nullptr && (p->left)->data == 1)
+		{
+			BNode * t = p;
+			f_del((p->left)->left);
+			t = t->left;
+			p->left = (p->left)->right;
+			delete t;
+			dell(p->left);
+		}
+		if(p->right != nullptr && (p->right)->data == 1)
+		{
+			BNode * t = p;
+			f_del((p->right)->left);
+			t = t->right;
+			p->right = (p->right)->right;
+			delete t;
+			dell(p->right);
+		}
+		else
+		{
+			dell(p->left);
+			dell(p->right);
+		}
+	}
+	int sum_alt(BNode * p)
+	{
+		if(p == nullptr)
+		{
+			return 0;
+		}
+		int a = 0;
+		if(p->right != nullptr)
+		{
+			a = (p->right)->data;
+		}
+		int b = 0;
+		if(p->left != nullptr)
+		{
+			b = (p->left)->data;
+		}
+		return a - b + sum_alt(p->left) + sum_alt(p->right);
+	}
+
 };
 int main()
 {
-	/*BNode *p13 = new BNode(13),
+	/* BNode *p13 = new BNode(13),
 	*p7 = new BNode(-7),
 	*p4 = new BNode(4),
 	*p14 = new BNode(14, p13),
@@ -301,17 +431,21 @@ int main()
 	{
 		cout << t.find(165, p8)->data << endl;
 	}
-	cout << "height tree = " << t.height(p8) << endl;
-	*/
-    BNode *p7 = new BNode(7), 
+	cout << "height tree = " << t.height(p8) << endl;*/
+    BNode *p7 = new BNode(107), 
 	*p6 = new BNode(6),
 	*p5 = new BNode(5),
-	*p4 = new BNode(4),
-	*p3 = new BNode(2, p6, p7),
-	*p2 = new BNode(1, p4, p5),
-	*p1 = new BNode(3, p2, p3);
+	*p4 = new BNode(1),
+	*p3 = new BNode(1, p6, p7),
+	*p0 = new BNode(1, p4, p5),
+	*p1 = new BNode(3, p0, p3);
 	BTree t(p1);
 	t.print();
-	cout << "ans = " << t.evan(p1);
+	//cout << "sum = " << t.sum_alt(p1) << endl;
+	//t.dell(p1);
+	t.enlarge(70);
+	t.print();
+    //cout << "ans = " << t.evan(p1);
+
 	return EXIT_SUCCESS;
 }
